@@ -1,5 +1,7 @@
 #include "DynamicArray.h"
 #include <iostream>
+#include <new>
+#include <stdexcept>
 
 int main() {
     DynamicArray a(3);
@@ -28,11 +30,25 @@ int main() {
     std::cout << "После вычитания {1, 2}: ";
     a.print();
 
-    std::cout << "Проверка ошибочного ввода:\n";
-    a.set(3, 5);
-    a.get(-1);
-    a.set(0, 101);
-    a.append(-101);
+    try {
+        a.get(3);
+    } catch (const std::out_of_range& error) {
+        std::cout << "out_of_range: " << error.what() << '\n';
+    }
+
+    try {
+        a.append(101);
+    } catch (const std::invalid_argument& error) {
+        std::cout << "invalid_argument: " << error.what() << '\n';
+    }
+
+    std::cout << "Имитация ошибки выделения памяти:\n";
+    try {
+        throw std::bad_alloc();
+    } catch (const std::bad_alloc& error) {
+        std::cout << "bad_alloc: " << error.what() << '\n';
+    }
+
     std::cout << "Массив после проверок: ";
     a.print();
 }
