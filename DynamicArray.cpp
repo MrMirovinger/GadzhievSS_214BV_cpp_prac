@@ -1,5 +1,6 @@
 #include "DynamicArray.h"
 #include <iostream>
+#include <stdexcept>
 
 bool DynamicArray::validIndex(int index) const {
     return index >= 0 && index < size;
@@ -12,8 +13,7 @@ bool DynamicArray::validValue(int value) const {
 DynamicArray::DynamicArray(int count) {
     size = count;
     if (size < 0) {
-        std::cout << "Отрицательный размер. Создан пустой массив.\n";
-        size = 0;
+        throw std::invalid_argument("Размер массива не может быть отрицательным.");
     }
     data = new int[size]{};
 }
@@ -41,28 +41,24 @@ void DynamicArray::print() const {
 
 void DynamicArray::set(int index, int value) {
     if (!validIndex(index)) {
-        std::cout << "Индекс вне массива.\n";
-        return;
+        throw std::out_of_range("Индекс вне массива.");
     }
     if (!validValue(value)) {
-        std::cout << "Значение должно быть от -100 до 100.\n";
-        return;
+        throw std::invalid_argument("Значение должно быть от -100 до 100.");
     }
     data[index] = value;
 }
 
 int DynamicArray::get(int index) const {
     if (!validIndex(index)) {
-        std::cout << "Индекс вне массива.\n";
-        return 0;
+        throw std::out_of_range("Индекс вне массива.");
     }
     return data[index];
 }
 
 void DynamicArray::append(int value) {
     if (!validValue(value)) {
-        std::cout << "Значение должно быть от -100 до 100.\n";
-        return;
+        throw std::invalid_argument("Значение должно быть от -100 до 100.");
     }
     int* newData = new int[size + 1];
     for (int i = 0; i < size; ++i) {
